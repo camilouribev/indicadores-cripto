@@ -8,6 +8,8 @@ import { ApiService } from '../services/api.service';
 })
 export class CoinListComponent implements OnInit {
   
+  bannerData: any = [];
+
   constructor( private api: ApiService){
 
   }
@@ -18,12 +20,14 @@ export class CoinListComponent implements OnInit {
   }
 
   getBannerData(){
-    this.api.getTrendingCurrency('COP')
-    .subscribe( response =>{console.log(response)} 
+    this.api.getTrendingCurrency('EUR')
+    .subscribe( response =>{
+      console.log(response)
+      this.bannerData = response} 
     )}
 
   getAllData(){
-    this.api.getCurrency("COP").subscribe( response =>{
+    this.api.getCurrency('EUR').subscribe( response =>{
       console.log(response);
     })
   }
