@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'indicadores-cripto';
+  selectedCurrency: string = "COP"
+  constructor(){
+
+  }
+  sendCurrency(event:string){
+    console.log(event);
+    
+  }
 }
