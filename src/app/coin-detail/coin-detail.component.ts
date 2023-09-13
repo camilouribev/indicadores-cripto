@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ApiService } from '../services/api.service';
+import { ApiService } from '../services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration, ChartType} from 'chart.js'
 import { BaseChartDirective } from 'ng2-charts'; 
@@ -70,7 +70,7 @@ export class CoinDetailComponent implements OnInit {
   }
 
   getGraphData(){
-    this.api.getGraphicalCurrencyData(this.coinId, "EUR", 1)
+    this.api.getGraphicalCurrencyData(this.coinId, this.currency , 1)
     .subscribe( response =>{
       setTimeout(()=>{this.myLineChart.chart?.update();}, 200);
       this.lineChartData.datasets[0].data = response.prices.map(( a: any) =>{

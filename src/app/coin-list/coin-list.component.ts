@@ -1,11 +1,13 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ApiService } from '../services/api.service';
+import { ApiService } from '../services/api/api.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router } from '@angular/router';
+import { CurrencyService } from '../services/currency/currency.service';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-coin-list',
@@ -16,22 +18,30 @@ export class CoinListComponent implements OnInit {
 
   bannerData: any = [];
 
+  currency : string = "EUR"
   dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['symbol', 'current_price', 'price_change_percentage_24h', 'market_cap'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private api: ApiService, private router: Router) {
+  constructor(private api: ApiService, private router: Router, private currencyService: CurrencyService) {
 
   }
 
   ngOnInit(): void {
     this.getAllData();
     this.getBannerData();
+    this.currencyService.getCurrency().subscribe(
+      value => {
+        this.currency = value;
+        this.getAllData();
+        this.getBannerData();
+      }
+    )
   }
 
   getBannerData() {
-    this.api.getTrendingCurrency('EUR')
+    this.api.getTrendingCurrency(this.currency)
       .subscribe(response => {
         console.log(response)
         this.bannerData = response
@@ -40,7 +50,7 @@ export class CoinListComponent implements OnInit {
   }
 
   getAllData() {
-    this.api.getCurrency('EUR').subscribe(response => {
+    this.api.getCurrency(this.currency).subscribe(response => {
       console.log(response);
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
