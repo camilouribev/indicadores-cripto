@@ -1,18 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ApiService } from '../services/api/api.service';
+import { ApiService } from '../../services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChartConfiguration, ChartType} from 'chart.js'
 import { BaseChartDirective } from 'ng2-charts'; 
-import { CurrencyService } from '../services/currency/currency.service';
+import { CurrencyService } from '../../services/currency/currency.service';
+import { GraphicalData } from 'src/app/interfaces/GraphicalData.interface';
+import { CoinData } from 'src/app/interfaces/CoinData.interface';
+
 
 @Component({
   selector: 'app-coin-detail',
   templateUrl: './coin-detail.component.html',
-  styleUrls: ['./coin-detail.component.scss']
+  styleUrls: ['./coin-detail.component.css']
 })
 export class CoinDetailComponent implements OnInit {
 
-  coinData : any;
+  coinData! : CoinData;
   coinId! : string;
   days : number = 1;
   currency : string = "EUR"
@@ -87,10 +90,10 @@ export class CoinDetailComponent implements OnInit {
     this.api.getGraphicalCurrencyData(this.coinId, this.currency , days)
     .subscribe( response =>{
       setTimeout(()=>{this.myLineChart.chart?.update();}, 200);
-      this.lineChartData.datasets[0].data = response.prices.map(( a: any) =>{
+      this.lineChartData.datasets[0].data = response.prices.map(( a: Array<number>) =>{
         return a[1];
       })
-      this.lineChartData.labels = response.prices.map((a:any) =>{
+      this.lineChartData.labels = response.prices.map((a: Array<number>) =>{
         let date = new Date(a[0]);
         let time = date.getHours() > 12 ?
         `${date.getHours() - 12}: ${date.getMinutes()} PM` :

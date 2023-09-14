@@ -11,7 +11,7 @@
                     <div class="col-1">
                         <div class="card">
                             <img [src]="row.image" width="100" class="img-fluid" alt="">
-                            <div class="card-body">
+                            <div class="card-body" ngClass="{'red-card-body': row.market_cap_change_percentage_24h}">
                                 <h5 class="card-title">{{row.symbol | uppercase }} <span class="text-danger">{{ row.market_cap_change_percentage_24h}}%</span></h5>
                                 <p class="card-text">{{ row.current_price | currency: currency}}  </p>
                             </div>

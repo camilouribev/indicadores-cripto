@@ -1,25 +1,26 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ApiService } from '../services/api/api.service';
+import { ApiService } from '../../services/api/api.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { Router } from '@angular/router';
-import { CurrencyService } from '../services/currency/currency.service';
+import { CurrencyService } from '../../services/currency/currency.service';
 import { __values } from 'tslib';
+import {  CryptoCurrency } from 'src/app/interfaces/CryptoCurrency.interface';
+import { TrendingCurrency } from 'src/app/interfaces/TrendingCurrency.interface';
 
 @Component({
   selector: 'app-coin-list',
   templateUrl: './coin-list.component.html',
-  styleUrls: ['./coin-list.component.scss']
+  styleUrls: ['./coin-list.component.css']
 })
 export class CoinListComponent implements OnInit {
 
-  bannerData: any = [];
+  bannerData: TrendingCurrency[] = [];
 
   currency : string = "EUR"
-  dataSource!: MatTableDataSource<any>;
+  dataSource!: MatTableDataSource<CryptoCurrency>;
   displayedColumns: string[] = ['symbol', 'current_price', 'price_change_percentage_24h', 'market_cap'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

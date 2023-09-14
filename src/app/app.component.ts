@@ -4,7 +4,7 @@ import { CurrencyService } from './services/currency/currency.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   selectedCurrency: string = "COP"
