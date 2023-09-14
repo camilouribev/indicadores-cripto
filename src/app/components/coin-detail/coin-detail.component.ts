@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../services/api/api.service';
 import { ActivatedRoute } from '@angular/router';
-import { ChartConfiguration, ChartType} from 'chart.js'
-import { BaseChartDirective } from 'ng2-charts'; 
+import { ChartConfiguration, ChartType } from 'chart.js'
+import { BaseChartDirective } from 'ng2-charts';
 import { CurrencyService } from '../../services/currency/currency.service';
-import { GraphicalData } from 'src/app/interfaces/GraphicalData.interface';
 import { CoinData } from 'src/app/interfaces/CoinData.interface';
 
 
@@ -15,10 +14,10 @@ import { CoinData } from 'src/app/interfaces/CoinData.interface';
 })
 export class CoinDetailComponent implements OnInit {
 
-  coinData! : CoinData;
-  coinId! : string;
-  days : number = 1;
-  currency : string = "EUR"
+  coinData!: CoinData;
+  coinId!: string;
+  days: number = 1;
+  currency: string = "EUR"
 
   public lineChartData: ChartConfiguration['data'] = {
     datasets: [
@@ -53,54 +52,54 @@ export class CoinDetailComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) myLineChart !: BaseChartDirective;
 
-  constructor(private api : ApiService, private activatedRoute: ActivatedRoute, private currencyService: CurrencyService){}
+  constructor(private api: ApiService, private activatedRoute: ActivatedRoute, private currencyService: CurrencyService) { }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe( value =>{
+    this.activatedRoute.params.subscribe(value => {
       this.coinId = value['id']
     });
 
     this.getCoinData();
     this.getGraphData(this.days);
-    this.currencyService.getCurrency().subscribe(value => { 
+    this.currencyService.getCurrency().subscribe(value => {
       this.currency = value;
       this.getGraphData(this.days);
       this.getCoinData();
-    } );
+    });
   }
 
-  getCoinData(){
+  getCoinData() {
     this.api.getCurrencyById(this.coinId)
-    .subscribe( response => {
-      this.coinData = response;
+      .subscribe(response => {
+        this.coinData = response;
 
-      if(this.currency === 'USD'){
-        response.market_data.current_price.eur = response.market_data.current_price.usd 
-        response.market_data.market_cap.eur = response.market_data.market_cap.usd 
-      }
+        if (this.currency === 'USD') {
+          response.market_data.current_price['eur'] = response.market_data.current_price['usd']
+          response.market_data.market_cap['eur'] = response.market_data.market_cap['usd']
+        }
 
-      this.coinData = response;
-      
-    })
+        this.coinData = response;
+
+      })
   }
 
-  getGraphData(days: number){
+  getGraphData(days: number) {
     this.days = days;
 
-    this.api.getGraphicalCurrencyData(this.coinId, this.currency , days)
-    .subscribe( response =>{
-      setTimeout(()=>{this.myLineChart.chart?.update();}, 200);
-      this.lineChartData.datasets[0].data = response.prices.map(( a: Array<number>) =>{
-        return a[1];
+    this.api.getGraphicalCurrencyData(this.coinId, this.currency, days)
+      .subscribe(response => {
+        setTimeout(() => { this.myLineChart.chart?.update(); }, 200);
+        this.lineChartData.datasets[0].data = response.prices.map((a: Array<number>) => {
+          return a[1];
+        })
+        this.lineChartData.labels = response.prices.map((a: Array<number>) => {
+          let date = new Date(a[0]);
+          let time = date.getHours() > 12 ?
+            `${date.getHours() - 12}: ${date.getMinutes()} PM` :
+            `${date.getHours() - 12}: ${date.getMinutes()} AM`
+          return days === 1 ? time : date.toLocaleTimeString();
+        })
       })
-      this.lineChartData.labels = response.prices.map((a: Array<number>) =>{
-        let date = new Date(a[0]);
-        let time = date.getHours() > 12 ?
-        `${date.getHours() - 12}: ${date.getMinutes()} PM` :
-        `${date.getHours() - 12}: ${date.getMinutes()} AM`
-        return days === 1 ? time : date.toLocaleTimeString();
-      })
-    })
 
   }
 

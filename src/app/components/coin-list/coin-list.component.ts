@@ -7,8 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { CurrencyService } from '../../services/currency/currency.service';
 import { __values } from 'tslib';
-import {  CryptoCurrency } from 'src/app/interfaces/CryptoCurrency.interface';
-import { TrendingCurrency } from 'src/app/interfaces/TrendingCurrency.interface';
+import {  Coin } from 'src/app/interfaces/Coin.interface';
 
 @Component({
   selector: 'app-coin-list',
@@ -17,10 +16,10 @@ import { TrendingCurrency } from 'src/app/interfaces/TrendingCurrency.interface'
 })
 export class CoinListComponent implements OnInit {
 
-  bannerData: TrendingCurrency[] = [];
+  bannerData: Coin[] = [];
 
   currency : string = "EUR"
-  dataSource!: MatTableDataSource<CryptoCurrency>;
+  dataSource!: MatTableDataSource<Coin>;
   displayedColumns: string[] = ['symbol', 'current_price', 'price_change_percentage_24h', 'market_cap'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
