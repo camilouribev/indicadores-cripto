@@ -17,7 +17,7 @@ export class CoinDetailComponent implements OnInit {
   coinData!: CoinData;
   coinId!: string;
   days: number = 1;
-  currency: string = "EUR"
+  currency: string = "USD"
 
   public lineChartData: ChartConfiguration['data'] = {
     datasets: [
@@ -96,7 +96,7 @@ export class CoinDetailComponent implements OnInit {
           let date = new Date(a[0]);
           let time = date.getHours() > 12 ?
             `${date.getHours() - 12}: ${date.getMinutes()} PM` :
-            `${date.getHours() - 12}: ${date.getMinutes()} AM`
+            `${date.getHours()}: ${date.getMinutes()} AM`
           return days === 1 ? time : date.toLocaleTimeString();
         })
       })

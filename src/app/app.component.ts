@@ -7,14 +7,12 @@ import { CurrencyService } from './services/currency/currency.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  selectedCurrency: string = "COP"
+  selectedCurrency: string = "USD"
   constructor( private currencyService : CurrencyService){
      
   }
 
   sendCurrency( event : string ){
-    console.log(event);
-
     this.currencyService.setCurrency(event);
     
   }
